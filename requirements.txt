@@ -1,1 +1,4 @@
 PyQt5==5.15.*
+pyqtdarktheme==2.1.*
+python-vlc==3.0.*
+pyinstaller==5.13.*
