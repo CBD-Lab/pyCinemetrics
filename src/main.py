@@ -1,4 +1,6 @@
 import sys
+import os
+import importlib
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDockWidget
 from PyQt5.QtCore import Qt
 import qdarktheme
@@ -48,11 +50,17 @@ class HelloWorld(QMainWindow):
 
 
 def main():
+    if '_PYIBoot_SPLASH' in os.environ and \
+            importlib.util.find_spec("pyi_splash"):
+        import pyi_splash  # type: ignore
+        pyi_splash.close()
+
     qdarktheme.enable_hi_dpi()
     app = QApplication(sys.argv)
     qdarktheme.setup_theme()
 
     _ = HelloWorld()
+
     sys.exit(app.exec_())
 
 
