@@ -1,15 +1,14 @@
 import sys
-import os
-import importlib
 from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import (
     QApplication, QMainWindow, QDockWidget, QAction, QMessageBox, QProgressBar
 )
 from PySide2.QtCore import Qt, Signal
-from ui.vlcplayer import VLCPlayer
 from ui.timeline import Timeline
+from ui.info import Info
 import qdarktheme
-from helper import resource_path
+from concurrent.futures import ThreadPoolExecutor
+from helper import resource_path, Splash
 
 
 class MainWindow(QMainWindow):
@@ -17,6 +16,7 @@ class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
+        self.threadpool = ThreadPoolExecutor()
         self.init_ui()
 
     def init_ui(self):
@@ -25,13 +25,15 @@ class MainWindow(QMainWindow):
 
         self.setWindowIcon(QIcon(resource_path('resources/icon.ico')))
 
+        # Delay VLC import to here
+        from ui.vlcplayer import VLCPlayer
         self.player = VLCPlayer(self)
         self.setCentralWidget(self.player)
 
         self.timeline = Timeline(self)
         self.addDockWidget(Qt.BottomDockWidgetArea, self.timeline)
 
-        self.info = QDockWidget('Info', self)
+        self.info = Info(self)
         self.addDockWidget(Qt.LeftDockWidgetArea, self.info)
 
         self.help = QDockWidget('Help', self)
@@ -91,16 +93,19 @@ class MainWindow(QMainWindow):
 
 
 def main():
+    splash = Splash()
+    splash.update('Loading VLC')
+    import vlc  # noqa
+
+    splash.update('Initialize QT')
     qdarktheme.enable_hi_dpi()
     app = QApplication(sys.argv)
     qdarktheme.setup_theme()
 
+    splash.update('Initialize GUI')
     _ = MainWindow()
 
-    if '_PYIBoot_SPLASH' in os.environ and \
-            importlib.util.find_spec('pyi_splash'):
-        import pyi_splash  # type: ignore
-        pyi_splash.close()
+    splash.close()
 
     sys.exit(app.exec_())
 

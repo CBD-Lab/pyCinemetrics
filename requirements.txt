@@ -1,4 +1,5 @@
 PySide2==5.15.*
 pyqtdarktheme==2.1.*
 python-vlc==3.0.*
+opencv-python==4.8.*
 pyinstaller==5.13.*
