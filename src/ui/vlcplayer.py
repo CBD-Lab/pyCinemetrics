@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 #
-# PyQt5 example for VLC Python bindings
+# PySide2 example for VLC Python bindings
 # Copyright (C) 2009-2010 the VideoLAN team
 #
 # This program is free software; you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
 #
 '''
-A simple example for VLC python bindings using PyQt5.
+A simple example for VLC python bindings using PySide2.
 
 Author: Saveliy Yusufov, Columbia University, sy2685@columbia.edu
 Date: 25 December 2018
@@ -26,7 +26,7 @@ Date: 25 December 2018
 
 import sys
 import platform
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PySide2 import QtWidgets, QtGui, QtCore
 import os
 import vlc
 
@@ -37,6 +37,8 @@ class VLCPlayer(QtWidgets.QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+
+        self.parent = parent
 
         # Create a basic vlc instance
         self.instance = vlc.Instance()
@@ -60,6 +62,7 @@ class VLCPlayer(QtWidgets.QWidget):
             self.videoframe = QtWidgets.QFrame()
 
         self.icons = {
+            'OPEN': self.style().standardIcon(QtWidgets.QStyle.SP_DirOpenIcon),
             'PLAY': self.style().standardIcon(QtWidgets.QStyle.SP_MediaPlay),
             'PAUSE': self.style().standardIcon(QtWidgets.QStyle.SP_MediaPause),
             'STOP': self.style().standardIcon(QtWidgets.QStyle.SP_MediaStop)
@@ -72,11 +75,16 @@ class VLCPlayer(QtWidgets.QWidget):
 
         self.positionslider = QtWidgets.QSlider(QtCore.Qt.Horizontal, self)
         self.positionslider.setToolTip('Position')
-        self.positionslider.setMaximum(1000)
+        self.positionslider.setMaximum(2000)
         self.positionslider.sliderMoved.connect(self.set_position)
         self.positionslider.sliderPressed.connect(self.set_position)
 
         self.hbuttonbox = QtWidgets.QHBoxLayout()
+        self.openbutton = QtWidgets.QPushButton()
+        self.openbutton.setIcon(self.icons['OPEN'])
+        self.hbuttonbox.addWidget(self.openbutton)
+        self.openbutton.clicked.connect(self.open_file)
+
         self.playbutton = QtWidgets.QPushButton()
         self.playbutton.setIcon(self.icons['PLAY'])
         self.hbuttonbox.addWidget(self.playbutton)
@@ -151,7 +159,7 @@ class VLCPlayer(QtWidgets.QWidget):
         self.media.parse()
 
         # Set the title of the track as window title
-        self.setWindowTitle(self.media.get_meta(0))
+        self.parent.filename.emit(filename[0])
 
         # The media player has to be 'connected' to the QFrame (otherwise the
         # video would be displayed in it's own window). This is platform
@@ -177,12 +185,12 @@ class VLCPlayer(QtWidgets.QWidget):
 
         # The vlc MediaPlayer needs a float value between 0 and 1, Qt uses
         # integer variables, so you need a factor; the higher the factor, the
-        # more precise are the results (1000 should suffice).
+        # more precise are the results (2000 should suffice).
 
         # Set the media position to where the slider was dragged
         self.timer.stop()
         pos = self.positionslider.value()
-        self.mediaplayer.set_position(pos / 1000.0)
+        self.mediaplayer.set_position(pos / 2000.0)
         self.timer.start()
 
     def update_ui(self):
@@ -191,7 +199,7 @@ class VLCPlayer(QtWidgets.QWidget):
         # Set the slider's position to its corresponding media position
         # Note that the setValue function only takes values of type int,
         # so we must first convert the corresponding media position.
-        media_pos = int(self.mediaplayer.get_position() * 1000)
+        media_pos = int(self.mediaplayer.get_position() * 2000)
         self.positionslider.setValue(media_pos)
 
         # No need to call this function if nothing is played
