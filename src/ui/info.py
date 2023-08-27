@@ -13,7 +13,7 @@ class Info(QDockWidget):
         super().__init__('Info', parent)
         self.parent = parent
         self.init_ui()
-        self.parent.filename.connect(self.on_filename_changed)
+        self.parent.filename_changed.connect(self.on_filename_changed)
         self.video_info_loaded.connect(self.update_table)
 
     def init_ui(self):
@@ -31,7 +31,7 @@ class Info(QDockWidget):
         if not video.isOpened():
             return
 
-        properties = [
+        self.properties = [
             ('File', os.path.basename(filename)),
             ('Frame count', int(video.get(cv2.CAP_PROP_FRAME_COUNT))),
             ('FPS', video.get(cv2.CAP_PROP_FPS)),
@@ -41,7 +41,7 @@ class Info(QDockWidget):
 
         video.release()
 
-        self.video_info_loaded.emit(properties)
+        self.video_info_loaded.emit(self.properties)
 
     def update_table(self, properties):
         self.table.setRowCount(0)

@@ -26,6 +26,8 @@ Date: 25 December 2018
 
 import sys
 import platform
+import time
+
 from PySide2 import QtWidgets, QtGui, QtCore
 import os
 import vlc
@@ -50,6 +52,7 @@ class VLCPlayer(QtWidgets.QWidget):
 
         self.init_ui()
         self.is_paused = False
+        self.parent.video_play_changed.connect(self.on_video_play_changed)
 
     def init_ui(self):
         '''Set up the user interface, signals & slots
@@ -159,7 +162,7 @@ class VLCPlayer(QtWidgets.QWidget):
         self.media.parse()
 
         # Set the title of the track as window title
-        self.parent.filename.emit(filename[0])
+        self.parent.filename_changed.emit(filename[0])
 
         # The media player has to be 'connected' to the QFrame (otherwise the
         # video would be displayed in it's own window). This is platform
@@ -172,6 +175,7 @@ class VLCPlayer(QtWidgets.QWidget):
         elif platform.system() == 'Darwin':  # for MacOS
             self.mediaplayer.set_nsobject(int(self.videoframe.winId()))
 
+        time.sleep(0.2)
         self.play_pause()
 
     def set_volume(self, volume):
@@ -191,6 +195,11 @@ class VLCPlayer(QtWidgets.QWidget):
         self.timer.stop()
         pos = self.positionslider.value()
         self.mediaplayer.set_position(pos / 2000.0)
+        self.timer.start()
+
+    def on_video_play_changed(self, pos):
+        self.timer.stop()
+        self.mediaplayer.set_position(pos / dict(self.parent.info.properties)['Frame count'])
         self.timer.start()
 
     def update_ui(self):
