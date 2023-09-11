@@ -30,13 +30,26 @@ class Info(QDockWidget):
         video = cv2.VideoCapture(filename)
         if not video.isOpened():
             return
+        frame_path = self.frame_save = "./img/"+str(os.path.basename(filename)[0:-4])+"/frame"#图片存储路径  # 替换为您要检查的文件夹路径
+        shot_count = 0
 
+        # 使用os.listdir遍历文件夹中的所有项目（包括文件和子文件夹）
+        if not os.path.exists(frame_path):  # 检查文件夹是否存在
+            shot_count=0
+        else:
+            for item in os.listdir(frame_path):
+                item_path = os.path.join(frame_path, item)
+                if os.path.isfile(item_path):  # 检查是否为文件
+                    shot_count += 1
+        ASL = int(video.get(cv2.CAP_PROP_FRAME_COUNT) / shot_count) if shot_count != 0 else 0
         self.properties = [
             ('File', os.path.basename(filename)),
-            ('Frame count', int(video.get(cv2.CAP_PROP_FRAME_COUNT))),
             ('FPS', video.get(cv2.CAP_PROP_FPS)),
             ('Width', int(video.get(cv2.CAP_PROP_FRAME_WIDTH))),
             ('Height', int(video.get(cv2.CAP_PROP_FRAME_HEIGHT))),
+            ('ASL', ASL),
+            ('Frame count', int(video.get(cv2.CAP_PROP_FRAME_COUNT))),
+            ('Shot count',shot_count)
         ]
 
         video.release()

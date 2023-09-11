@@ -52,7 +52,18 @@ class VLCPlayer(QtWidgets.QWidget):
 
         self.init_ui()
         self.is_paused = False
-        self.parent.video_play_changed.connect(self.on_video_play_changed)
+        self.total_time_label = QtWidgets.QLabel(self)
+        self.total_time_label.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        self.total_time_label.setFixedWidth(55)
+        self.total_time_label.setFixedHeight(20)
+
+        self.current_time_label = QtWidgets.QLabel(self)
+        self.current_time_label.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        self.current_time_label.setFixedWidth(55)
+        self.current_time_label.setFixedHeight(20)
+        self.hbuttonbox.addWidget(self.current_time_label)
+        self.hbuttonbox.addWidget(QtWidgets.QLabel("/", self))
+        self.hbuttonbox.addWidget(self.total_time_label)
 
     def init_ui(self):
         '''Set up the user interface, signals & slots
@@ -97,7 +108,6 @@ class VLCPlayer(QtWidgets.QWidget):
         self.stopbutton.setIcon(self.icons['STOP'])
         self.hbuttonbox.addWidget(self.stopbutton)
         self.stopbutton.clicked.connect(self.stop)
-
         self.hbuttonbox.addStretch(1)
         self.volumeslider = QtWidgets.QSlider(QtCore.Qt.Horizontal, self)
         self.volumeslider.setMaximum(100)
@@ -105,12 +115,11 @@ class VLCPlayer(QtWidgets.QWidget):
         self.volumeslider.setToolTip('Volume')
         self.hbuttonbox.addWidget(self.volumeslider)
         self.volumeslider.valueChanged.connect(self.set_volume)
-
         self.vboxlayout = QtWidgets.QVBoxLayout()
         self.vboxlayout.addWidget(self.videoframe)
         self.vboxlayout.addWidget(self.positionslider)
-        self.vboxlayout.addLayout(self.hbuttonbox)
 
+        self.vboxlayout.addLayout(self.hbuttonbox)
         self.setLayout(self.vboxlayout)
 
         self.timer = QtCore.QTimer(self)
@@ -202,6 +211,10 @@ class VLCPlayer(QtWidgets.QWidget):
         self.mediaplayer.set_position(pos / dict(self.parent.info.properties)['Frame count'])
         self.timer.start()
 
+        self.mediaplayer.play()
+        self.playbutton.setIcon(self.icons['PAUSE'])
+        self.timer.start()
+        self.is_paused = False
     def update_ui(self):
         '''Updates the user interface'''
 
@@ -210,7 +223,14 @@ class VLCPlayer(QtWidgets.QWidget):
         # so we must first convert the corresponding media position.
         media_pos = int(self.mediaplayer.get_position() * 2000)
         self.positionslider.setValue(media_pos)
+        total_time = self.mediaplayer.get_length() / 1000  # 总时间（以秒为单位）
+        current_time = self.mediaplayer.get_time() / 1000  # 已经播放的时间（以秒为单位）
 
+        total_time_str = time.strftime('%H:%M:%S', time.gmtime(total_time))
+        current_time_str = time.strftime('%H:%M:%S', time.gmtime(current_time))
+
+        self.total_time_label.setText(total_time_str)
+        self.current_time_label.setText(current_time_str)
         # No need to call this function if nothing is played
         if not self.mediaplayer.is_playing():
             self.timer.stop()
