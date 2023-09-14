@@ -1,10 +1,9 @@
 import os
 from collections import Counter
-
 from PIL import Image
 import numpy as np
 from matplotlib import pyplot as plt
-from scipy.cluster.vq import vq, kmeans, whiten
+from scipy.cluster.vq import vq, kmeans
 import math
 from .resultsave import resultsave
 

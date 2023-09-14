@@ -1,4 +1,6 @@
 import os
+import re
+
 import easyocr
 import cv2
 import csv
@@ -28,8 +30,8 @@ class SubtitleProcessor:
                 break
             cap.set(cv2.CAP_PROP_POS_FRAMES, i)
             _, frame = cap.read(i)
-            h, w = frame.shape[0:2]  # 图片尺寸，截取下三分之一和中间五分之四作为字幕检测区域
-            start_h = (h // 3)*2
+            h, w = frame.shape[0:2]  # 图片尺寸，截取下五分之一和中间五分之四作为字幕检测区域
+            start_h = (h // 5)*4
             end_h = h
             start_w = w // 10
             end_w = (w // 10) * 9
@@ -42,7 +44,8 @@ class SubtitleProcessor:
                 for w in wordslist:
                     # print('w',w,w[1])
                     if w[1] is not None:
-                        if not subtitleList or w[1]+'\n' != subtitleList[-1][1]:
+                        print("w1",w[1])
+                        if (not subtitleList or w[1]+'\n' != subtitleList[-1][1]) and (not self.contains_english(w[1])):
                             subtitleList.append([i,w[1]])
                             subtitleStr=subtitleStr+w[1]+'\n'
             else:
@@ -169,4 +172,9 @@ class SubtitleProcessor:
         else:
             subtitle_event=False
         return subtitle_event
+
+    def contains_english(self,text):
+        # 使用正则表达式匹配英文字符
+        english_pattern = re.compile(r'[a-zA-Z]')
+        return bool(english_pattern.search(text))
 

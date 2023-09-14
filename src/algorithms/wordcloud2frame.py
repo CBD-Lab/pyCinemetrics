@@ -15,7 +15,7 @@ class WordCloud2Frame:
         data = []
         with open(filename) as csvfile:
             csv_reader = csv.reader(csvfile)  # 使用csv.reader读取csvfile中的文件
-            # header = next(csv_reader)        # 读取第一行每一列的标题
+            header = next(csv_reader)        # 读取第一行每一列的标题
             for row in csv_reader:  # 将csv 文件中的数据保存到data中
                 data.append(row[1])  # 选择某一列加入到data数组中
             print(data)
@@ -45,7 +45,6 @@ class WordCloud2Frame:
             if tf[seg] < 1 or len(seg) < 0 or "一" in seg or "," in seg or ";" in seg or " " in seg:  #or seg in stopword
                 tf.pop(seg)
 
-        print(tf)
 
         ci, num, data = list(tf.keys()), list(tf.values()), []
         for i in range(len(tf)):
@@ -58,7 +57,7 @@ class WordCloud2Frame:
 
         for i in range(len(data)):
             tf_sorted[data[i][1]] = data[i][0]
-        print(tf_sorted)
+        print('tfsorted',tf_sorted)
         return tf_sorted
 
     def wordfrequencyStr(self,datastr):
@@ -96,15 +95,24 @@ class WordCloud2Frame:
 
 
     def plotwordcloud(self,tf_sorted,save_path,save_type):
+        print('save_path,save_type',save_path,save_type)
         font=r'c:\Windows\Fonts\simfang.ttf'
-        print(tf_sorted)
-        wc=WordCloud(font_path=font,width=800,height=600).generate_from_frequencies(tf_sorted)
+        wc=WordCloud(font_path=font,width=800,height=600,background_color='white').generate_from_frequencies(tf_sorted)
         plt.clf()
         plt.axes(facecolor='black')
-        plt.style.use('dark_background')
+        # plt.style.use("dark_background")
         plt.imshow(wc)
         plt.axis('off')
         # plt.show()
         plt.savefig(save_path+save_type+".png",color='white')
         # wc.to_file(save_type+'.png')
 
+if __name__ == '__main__':
+    # 定义要创建的目录路径
+    directory_path = './img/yiyihappy/'
+
+    # 使用os.makedirs()创建目录（包括父目录）
+    os.makedirs(directory_path, exist_ok=True)
+    wc2f = WordCloud2Frame()
+    tf = wc2f.wordfrequency("E:/CBD-lab/video-clientNew/img/yiyihappy/objects.csv")
+    wc2f.plotwordcloud(tf, directory_path, "/objects")

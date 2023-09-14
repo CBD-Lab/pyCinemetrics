@@ -1,3 +1,4 @@
+import os
 import sys
 # from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import (
@@ -13,6 +14,7 @@ from concurrent.futures import ThreadPoolExecutor
 from helper import Splash
 from ui.vlcplayer import VLCPlayer
 from ui.control import Control
+# os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
 # from ui.subtitleEasyOcr import getsubtitleEasyOcr,subtitle2Srt
