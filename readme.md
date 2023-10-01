@@ -13,5 +13,5 @@ To get started with PyCinemetrics, simply download the source code from [https:/
 For any assistance or inquiries regarding the project, please reach out via email to 115305288@qq.com(Chunfang Li) or visit [https://movie.yingshinet.com](https://movie.yingshinet.com).
 
 ## Who maintains and contributes to the project?
-PyCinemetrics is sponsored by Chunfang Li(https://ccs.cuc.edu.cn/2019/0911/c6239a148843/page.htm), and the development of this software has been contributed to by Junli Lu, Yuchen Pei, Yuhang Hu, Yalv Fan, Yanzhi Tian, Xiaoyu Linghu, Kun Wang, and Jiangnan Sun.
-Professor Daoxin Li(http://www.art.pku.edu.cn/szdw/qzjs/xjyysxx/ldx/index.htm) serves as the advisor for this technology project in the field of digital humanities and film studies.
+PyCinemetrics is sponsored by Chunfang Li(Communication University of China), and the development of this software has been contributed to by Junli Lu, Yuchen Pei, Yuhang Hu, Yalv Fan, Yanzhi Tian, Xiaoyu Linghu, Kun Wang, and Jiangnan Sun.
+Professor Daoxin Li(Peking University) serves as the advisor for this technology project in the field of digital humanities and film studies.
