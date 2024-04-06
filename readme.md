@@ -4,6 +4,14 @@ https://www.sciencedirect.com/science/article/pii/S2352711024000578
 https://movie.yingshinet.com/#/video?id=254
 ## Daoxin Li‘s comments
 https://mp.weixin.qq.com/s/xDrzASlrZDRStq45nPKf_Q
+## 中文简介
+功能包括：分镜、色彩提取、物体识别、字幕识别、景别识别。
+ CCKS-Cinemetrics（别名PyCinemetrics）是国内第一款专用的计量电影研究工具，提供了五个功能，利用深度学习和PySide2 来解构电影的视觉风格。它使用 TransNetV2 将电影分割成镜头帧，探索平均镜头长度（Average Shot Length）和节奏。利用 K-Means 从镜头帧中提取主要颜色。使用 EasyOcr 提取电影字幕以获取影片对白。基于 VGG19 的目标检测来识别隐喻性道具和物体。通过 OpenPose 检测骨骼点的比例以及在画面的占比，间接确定拍摄景别。基于PySide2 集成PyCinemetrics 的各个功能并提供良好的扩展性，如替换智能模块。使用CCKS-Cinemetrics 对一组经典电影进行了计量分析，实验验证了在帧分析中的准确性和效率。
+下载：
+链接：https://pan.baidu.com/s/1sHB_h4NlODp0MhPvfedy2Q 
+提取码：2023 
+计量电影工具CCKS-Cinemetrics测试版
+
 ## What does the project do?
 PyCinemetrics is a powerful software tool for film analysis that utilizes deep learning and PySide2 to deconstruct the visual style of films. It employs TransNetV2 to divide a film into shot-frames, enabling the exploration of Average Shot Length (ASL) and pace. The tool also extracts main colors from shot-frames using K-Means. It can extract movie subtitles using EasyOcr for dialogue analysis. Additionally, PyCinemetrics utilizes object detection based on VGG19 to identify metaphorical props and objects. By detecting the proportion of skeletal points occupied in the frame using OpenPose, it indirectly determines the shot scale. Finally, PyCinemetrics is integrated and implemented using PySide2.
 
