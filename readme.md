@@ -1,6 +1,8 @@
 PyCinemetrics, also known as CCKS-Cinemetrics (Chinese Cinema Knowledge System-Cinemetrics, (https://movie.yingshinet.com)), is a computational film studies tool.
 ## Paper Links
 https://www.sciencedirect.com/science/article/pii/S2352711024000578
+Daoxin Li‘s comments
+https://mp.weixin.qq.com/s/xDrzASlrZDRStq45nPKf_Q
 ## What does the project do?
 PyCinemetrics is a powerful software tool for film analysis that utilizes deep learning and PySide2 to deconstruct the visual style of films. It employs TransNetV2 to divide a film into shot-frames, enabling the exploration of Average Shot Length (ASL) and pace. The tool also extracts main colors from shot-frames using K-Means. It can extract movie subtitles using EasyOcr for dialogue analysis. Additionally, PyCinemetrics utilizes object detection based on VGG19 to identify metaphorical props and objects. By detecting the proportion of skeletal points occupied in the frame using OpenPose, it indirectly determines the shot scale. Finally, PyCinemetrics is integrated and implemented using PySide2.
 
